@@ -2,6 +2,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
+// 用 部分es6 语法会报错，查询文档 p5js 对es6的支持不高，需要编译。
+
 let canvas // canvas画布
 let buttonDiv // div button
 let rateButton // 速度控制按钮
