@@ -1,5 +1,19 @@
 // 逻辑部分
 
+// 初始化矩阵
+const init = board => {
+  if (board.length === 0) {
+    return
+  }
+  let newBoard = []
+  for (let i = 0, len = board.length; i < len; i++) {
+    newBoard[i] = [0, ...board[i], 0]
+  }
+  let arr = new Array(board[0].length+2).fill(0)
+  newBoard = [arr, ...newBoard, arr]
+  return newBoard
+}
+
 // 1. 周围3个1，则1->1 0->1
 // 2. 周围2个1，则1->1 0->0
 // 3. 周围0个1，1个1，则1->0 0->0
@@ -98,6 +112,7 @@ const liveOrDie = (board, cenX, cenY) => {
 
 
 export {
+  init,
   dieStatus,
   aliveStatus,
   calAliveNum

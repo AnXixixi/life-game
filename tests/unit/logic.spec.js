@@ -2,10 +2,26 @@
  * 游戏逻辑测试
  */
 import {
+  init,
   dieStatus,
   aliveStatus,
   calAliveNum
 } from '../../src/logic'
+
+// 测试 初始化 函数
+describe('测试 init 函数', () => {
+  it('2*2的矩阵在初始化后应该是4*4 周围都是0', () => {
+    expect(init([
+      [1, 1],
+      [1, 1]
+    ])).toEqual([
+      [0, 0, 0, 0],
+      [0, 1, 1, 0],
+      [0, 1, 1, 0],
+      [0, 0, 0, 0]
+    ]);
+  });
+});
 
 //  测试 dieStatus 函数
 describe('测试 dieStatus 函数', () => {
