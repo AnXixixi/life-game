@@ -1,14 +1,28 @@
+var path = require('path');
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-  entry: './src/p5test/sketch.js',
+  entry: path.resolve(__dirname + "/src/main.js"),
   output: {
-      path: __dirname,
-      filename: './build/bundle.js'
+    path: path.resolve(__dirname + "/dist"),
+    filename: "bundle.js"
   },
   module: {
-      rules: [{
-          test: /\.js?$/,
-          exclude: /(node_modules)/,
-          loader: 'babel-loader'
-      }]
-  }
-}
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        query: { compact: false },
+        exclude: /node_modules/
+      },
+      { test: /\.css$/, loader: "style-loader!css-loader" }
+    ]
+  },
+  plugins: [
+    new HtmlwebpackPlugin({
+      title: "game of life",
+      template: "./index.html"
+    })
+  ]
+};
+
