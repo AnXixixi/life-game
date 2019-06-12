@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <button id="next">start</button>
+        <button id="next">next</button>
     </header>
     <div id="main">
         <canvas id="gamemain"></canvas>
@@ -18,82 +18,90 @@
     <footer></footer>
 </body>
 <script>
-        document
-            .getElementById('gamemain')
-            .addEventListener('click', updateHandler, false);
-        document.getElementById("next").addEventListener('click',next);
+        const CAVANS_WIDTH = 600;//画布宽度
+        const CANVAS_HEIGHT = 600;//画布高度
+        const RECTW = 10 ; //每一小格的宽
+        const RECTH = 10 ;//每一小格的高
 
+        let canvas = document.getElementById('gamemain');
+        let ctx = canvas.getContext('2d');
+        let arr = init_first();//初始数组全为0
+
+        canvas.width = CAVANS_WIDTH;
+        canvas.height = CANVAS_HEIGHT;
+        canvas.style.border = '1px solid black';//画布边框样式
+
+        canvas.addEventListener('click', clickDraw, false); //canvas鼠标点击事件
+
+        document.getElementById("next").addEventListener('click',next);//点击next，绘制下一帧
+
+        //产生全为0的数组
+        function init_first(){
+            let length_i = CANVAS_HEIGHT / RECTH;//每一行的格子数
+            let length_j = CAVANS_WIDTH / RECTW; //每一列的格子数
+            let first_arr = [];
+            for(let i = 0;i < length_i; i++){
+                first_arr[i] = [];
+                for(let j = 0; j < length_j; j++){
+                first_arr[i][j] = 0;
+                }
+            }
+            return first_arr;
+        }
+
+        //单次操作，改变数据，重新绘制
         function next(){
-            //清空表格
-            console.log('next');
             arr = gameOfLife(arr);
             draw(arr);
         }
 
-        function updateHandler(e) {
-        
+        function clickDraw(e) {
             const box = canvas.getBoundingClientRect();
-            const mouseX = Math.floor((e.clientX - box.left) * canvas.width / box.width);
-            const mouseY = Math.floor((e.clientY - box.top) * canvas.height / box.height);
+            const mouseX = Math.floor((e.clientX - box.left) * CAVANS_WIDTH / box.width);
+            const mouseY = Math.floor((e.clientY - box.top) * CANVAS_HEIGHT / box.height);
             
+            //将点击的坐标转换成数组下标
             let x = Math.floor(mouseX/10);
             let y = Math.floor(mouseY/10);
-            console.log([x,y]);
+            
             arr[x][y] = 1;
             draw(arr);
         }
-    let canvas = document.getElementById('gamemain');
-    let ctx = canvas.getContext('2d');
-
-    canvas.width = 600;
-    canvas.height = 600;
-    canvas.style.border = '1px solid black';
-    var rectH = 10;
-    var rectW = 10;
-    let arr = init_first();
-    let allZeroArr = init_first();
-    
-    //绘制表格
-    function drawTable() {
-        //清除整个画布（重设高度）
-        canvas.height = canvas.height;
-        ctx.lineWidth = .1;
-        // 第一步： 绘制横线
-        for (var i = 0; i < canvas.width; i++) {
-            ctx.moveTo(rectW * i, 0);
-            //如果不设置moveTo，当前画笔没有位置
-            ctx.lineTo(rectW * i, canvas.height);
-        }
-        //第二步：绘制竖线：如果绘制的格子的宽高相等，可以将for循环放到一个里面；
-        for (var i = 0; i < canvas.height; i++) {
-            ctx.moveTo(0, rectH * i);
-            ctx.lineTo(canvas.width, rectH * i);
-        }
-        ctx.stroke();
-    }
-    function fill(x,y){
-        ctx.fillRect(x*10,y*10,10,10);
-    }
-    function draw(arr){
-        drawTable();
-        for(let i = 0;i < arr[0].length; i++){
-            for(let j = 0; j < arr.length; j++){
-                if(arr[i][j] == 1){
-                    fill(i,j);
+        //绘制整个画布
+        function draw(arr){
+            drawTable();
+            for(let i = 0;i < arr[0].length; i++){
+                for(let j = 0; j < arr.length; j++){
+                    if(arr[i][j] == 1){
+                        fill(i,j);
+                    }
                 }
             }
         }
-    }
-    function init_first(){
-        let first_arr = [];
-        for(let i = 0;i < 60; i++){
-             first_arr[i] = [];
-            for(let j = 0; j < 60; j++){
-               first_arr[i][j] = 0;
+        //绘制表格
+        function drawTable() {
+            //清除整个画布（重设高度）
+            canvas.height = canvas.height;
+            ctx.lineWidth = .1;
+            // 第一步： 绘制横线
+            for (var i = 0; i < canvas.width; i++) {
+                ctx.moveTo(RECTW * i, 0);
+                //如果不设置moveTo，当前画笔没有位置
+                ctx.lineTo(RECTW * i, canvas.height);
             }
+            //第二步：绘制竖线：如果绘制的格子的宽高相等，可以将for循环放到一个里面；
+            for (var i = 0; i < canvas.height; i++) {
+                ctx.moveTo(0, RECTH * i);
+                ctx.lineTo(canvas.width, RECTH * i);
+            }
+            ctx.stroke();
         }
-        return first_arr;
-    }
-    draw(arr);
+        //填充样式
+        function fill(x,y){
+            ctx.fillStyle = "red";
+            ctx.fillRect(x*10,y*10,10,10);
+        }
+
+        draw(arr);
 </script>
 </html>
