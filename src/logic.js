@@ -22,7 +22,7 @@ const init = board => {
 const gameOfLife = board => {
   board = init(board)
   // 开辟新数组保存状态 每次穿进去的是初始化后的棋盘，为了考虑边界
-  let newBoard = new Array(board.length-2);
+  let newBoard = new Array(board.length - 2);
   for (let i = 0, len = board.length - 2; i < len; i++) {
     newBoard[i] = new Array(board[0].length - 2)
   }
