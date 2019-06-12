@@ -2,11 +2,38 @@
  * 游戏逻辑测试
  */
 import {
+  gameOfLife,
   init,
   dieStatus,
   aliveStatus,
   calAliveNum
 } from '../../src/logic'
+
+// gameOfLife
+describe('测试 gameOfLife 函数', () => {
+  it('测试实例1', () => {
+    expect(gameOfLife(
+      [[1, 0, 0],
+      [1, 1, 0],
+      [1, 1, 0]])).toEqual([
+        [1, 1, 0],
+        [0, 0, 0],
+        [1, 1, 0]
+      ]);
+  });
+
+  it('测试实例2', () => {
+    expect(gameOfLife(
+      [[0, 1, 0],
+      [0, 1, 1],
+      [0, 0, 0]])).toEqual([
+        [0, 1, 1],
+        [0, 1, 1],
+        [0, 0, 0]
+      ]);
+  });
+});
+
 
 // 测试 初始化 函数
 describe('测试 init 函数', () => {
