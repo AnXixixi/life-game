@@ -7,8 +7,12 @@ let rateButton // 速度控制按钮
 let rateButtonLabel // 按钮标签
 let clearButton // 清除按钮
 let randomButton // 随机生成按钮
+let board //二维矩阵，相当于棋盘
+let promBox // 提示框
+let statusBox // 状态框
+let paused = true // 开始时是暂停的
 // 画布设置函数
-function setup() {
+const setup = () => {
   // 创建 Canvas
   canvas = createCanvas(720, 480);
 
@@ -28,19 +32,69 @@ function setup() {
   rateButton.parent(buttonDiv)
 
   // 清除按钮
- clearButton = createButton('清除')
- clearButton.mousePressed(clearScene)
- clearButton.class('clear-btn')
- clearbutton.parent(buttonDiv)
+  clearButton = createButton('清除')
+  clearButton.mousePressed(clearAll)
+  clearButton.class('clear-btn')
+  clearbutton.parent(buttonDiv)
 
   // 随机生成按钮
   randomButton = createButton('随机生成矩阵')
-  randomButton.mousePressed(randomScene)
+  randomButton.mousePressed(randomRect)
   randomButton.class('random-btn')
   randomButton.parent(buttonDiv)
 
   // 提示框
-
+  promBox = createP('提示')
+  promBox.class('game-instruction')
   // 状态提示框
-  
+  statusBox = create('暂停')
+  statusBox.class('status-label')
+
+  // 初始化棋盘
+  board = new Array(24)
+  for (let i = 0; i < board.length; i++) {
+    board[i] = new Array(36)
+  }
+  init()
+  // 初始化完后就结束，不再进行渲染
+  noLoop();
 }
+
+const init = () => {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[0].length; j++) {
+      board[i][j] = 0
+    }
+  }
+
+  const clearAll = () => {
+    if (!paused) {
+      paused = true
+    }
+    init()
+    redraw()
+  }
+
+  const randomRect = ()=>{
+    
+  }
+
+  // 画图函数，和 python 的 matplotlib 类似
+  const draw = () => {
+    background(255)
+    for (let i = 0; i < 24; i++) {
+      for (let j = 0; j < 36; j++) {
+        if (board[i][j] === 1) {
+          fill(0)
+        } else {
+          fill(255)
+        }
+        stroke(0)
+        rect(j * 20, i * 20, 19, 19)
+      }
+    }
+    if (!paused) {
+      board = gameOfLife(board)
+    }
+
+  }
