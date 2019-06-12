@@ -1,12 +1,65 @@
-import { shallowMount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
+import {gameOfLife} from '../../src/components/luoji'
 
-describe('HelloWorld.vue', () => {
-  it('renders props.msg when passed', () => {
-    const msg = 'new message'
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg }
-    })
-    expect(wrapper.text()).toMatch(msg)
+
+// 1. 周围3个1，则1->1 0->1
+// 2. 周围2个1，则1->1 0->0
+// 3. 周围0个1，1个1，则1->0 0->0
+// 4. 周围4-7个1，则 1->0 0->0
+describe('test', () => {
+  it('1个活细胞周围有3个活细胞', () => {
+    expect(gameOfLife([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])).toEqual([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])
+  })
+  it('1个死细胞周围有3个活细胞', () => {
+    expect(gameOfLife([
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1]
+    ])).toEqual([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])
+  })
+  it('1个活细胞周围有2个活细胞', () => {
+    expect(gameOfLife([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])).toEqual([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])
+  })
+  it('1个死细胞周围有2个活细胞', () => {
+    expect(gameOfLife([
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1]
+    ])).toEqual([
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1]
+    ])
+  })
+  it('1个活细胞周围有2个活细胞', () => {
+    expect(gameOfLife([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])).toEqual([
+      [0, 0, 1],
+      [0, 1, 1],
+      [0, 0, 1]
+    ])
   })
 })
+
