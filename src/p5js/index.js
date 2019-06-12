@@ -75,8 +75,16 @@ const init = () => {
     redraw()
   }
 
-  const randomRect = ()=>{
-    
+  const randomRect = () => {
+    if (!paused) {
+      paused = true
+    }
+    for (let i = 0; i < 24; i++) {
+      for (let j = 0; j < 36; j++) {
+        board[i][j] = floor(random(2))
+      }
+    }
+    redraw()
   }
 
   // 画图函数，和 python 的 matplotlib 类似
