@@ -1,43 +1,48 @@
-.bottom {
+.cel {
   position: absolute;
-  top: 620px;
-  left: 50%;
-  width: 500px;
+  top: 50%;
+  left: 87%;
+  width: 1000px;
+  font-size:20px;
   transform: translateX(-50%);
 }
 
-.bottom .slider-label {
+.cel .slider-label {
   display: inline-block;
   margin: 0 10px;
 }
 
 .random-btn, .clear-btn {
   margin: 0 10px;
+  font-size:20px;
 }
 
 .clear-btn {
   margin-left: 20px;
 }
 
-.game-instruction {
-  text-align: center;
+.prom-box {
+  color:red;
+  font-size:25px;
+  right:500px;
   margin: auto;
-  position: relative;
-  top: -13px;
+  position: absolute;
+  top: 30px;
 }
 
-.status-label {
+.game-status {
   position: absolute;
-  top: 10px;
-  left: 50%;
+  top: 100px;
+  left: 60%;
+  font-size: 40px;
   transform: translateX(-50%);
   font-weight: bold;
 }
 
-.status-label.paused {
-  color: red;
+.game-status.paused {
+  color: gray;
 }
 
-.status-label.running {
+.game-status.running {
   color: green;
 }

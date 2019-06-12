@@ -1,3 +1,4 @@
+
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 
@@ -11,122 +12,116 @@ let board //二维矩阵，相当于棋盘
 let promBox // 提示框
 let statusBox // 状态框
 let paused = true // 开始时是暂停的
-// 画布设置函数
-const setup = () => {
-  // 创建 Canvas
+let startButton // 开始暂停 Button
+function setup() {
+
   canvas = createCanvas(720, 480);
 
-  // 将画布居中
-  canvas.position((windowWidth - width) / 2, (windowHeight - height) / 2)
+  canvas.position((windowWidth - 1320) / 2, (windowHeight - 560) / 2);
 
-  // 创建一个Div 用于放置button
-  buttonDiv = createDiv('')
-  buttonDiv.class('bottom')
+  divCell = createDiv('');
+  divCell.class('cel');
 
-  // 创建速度控制按钮
-  rateButton = createSlider(1, 60, 30, 1); // 滑块 min max value step
-  rateButtonLabel = createP('frame rate 0 fps')
-  rateButton.class('slider')
-  rateButtonLabel.class('slider-label')
-  rateButtonLabel.parent(buttonDiv)
-  rateButton.parent(buttonDiv)
+  rateButton = createSlider(1, 60, 30, 1);
+  rateButtonLabel = createP('速度从1-60由慢到快');
+  rateButton.class('slider');
+  rateButtonLabel.class('slider-label');
+  rateButtonLabel.parent(divCell);
+  rateButton.parent(divCell);
 
-  // 清除按钮
-  clearButton = createButton('清除')
-  clearButton.mousePressed(clearAll)
-  clearButton.class('clear-btn')
-  clearbutton.parent(buttonDiv)
+  clearButton = createButton('清空');
+  clearButton.mousePressed(clearAll);
+  clearButton.class('clear-btn');
+  clearButton.parent(divCell);
 
-  // 随机生成按钮
-  randomButton = createButton('随机生成矩阵')
-  randomButton.mousePressed(randomRect)
-  randomButton.class('random-btn')
-  randomButton.parent(buttonDiv)
+  randomButton = createButton('随机细胞群');
+  randomButton.mousePressed(randomCell);
+  randomButton.class('random-btn');
+  randomButton.parent(divCell);
 
-  // 提示框
-  promBox = createP('提示')
-  promBox.class('game-instruction')
-  // 状态提示框
-  statusBox = create('暂停')
+  startButton = createButton('开始/暂停');
+  startButton.mousePressed(startAndParseGame);
+  startButton.class('clear-btn');
+  startButton.parent(divCell);
+
+  promBox = createP('生命细胞游戏：点击空格游戏开始');
+  promBox.class('prom-box');
+
+  statusBox = createP('暂停');
   statusBox.class('status-label')
 
-  // 初始化棋盘
-  board = new Array(24)
-  for (let i = 0; i < board.length; i++) {
-    board[i] = new Array(36)
+  board = new Array(24);
+  for (let row = 0; row < 24; ++row) {
+    board[row] = new Array(36);
   }
-  init()
-  // 初始化完后就结束，不再进行渲染
+
+  init();
   noLoop();
 }
 
-const init = () => {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[0].length; j++) {
-      board[i][j] = 0
-    }
-  }
 
-  const clearAll = () => {
-    if (!paused) {
-      paused = true
-    }
-    init()
-    redraw()
-  }
-  // 生成随机数 0 1 
-  const randomRect = () => {
-    if (!paused) {
-      paused = true
-    }
-    for (let i = 0; i < 24; i++) {
-      for (let j = 0; j < 36; j++) {
-        board[i][j] = floor(random(2))
-      }
-    }
-    redraw()
-  }
+function clearAll() {
+  if (!paused) paused = true;
+  init();
+  redraw();
 }
 
-// 画图函数，和 python 的 matplotlib 类似
-const draw = () => {
-  background(255)
+
+function randomCell() {
+  if (!paused) paused = true;
   for (let i = 0; i < 24; i++) {
     for (let j = 0; j < 36; j++) {
-      if (board[i][j] === 1) {
-        fill(0)
-      } else {
-        fill(255)
-      }
-      stroke(0)
-      rect(j * 20, i * 20, 19, 19)
+      // 随机1或者0
+      board[i][j] = floor(random(2));
+    }
+  }
+  redraw();
+}
+
+function draw() {
+  background(255);
+  for (let i = 0; i < 24; i++) {
+    for (let j = 0; j < 36; j++) {
+      if ((board[i][j] == 1)) fill(0);
+      else fill(255);
+      stroke(0);
+      rect(j * 20, i * 20, 20 - 1, 20 - 1);
     }
   }
   if (!paused) {
-    board = gameOfLife(board)
-    statusBox.html("Running")
-    statusBox.class('status-label running')
+    board = gameOfLife(board);
+    statusBox.html('游戏继续');
+    statusBox.class('game-status running');
   } else {
-    statusBox.html('Paused')
-    statusBox.class('status-label paused')
+    statusBox.html('游戏暂停');
+    statusBox.class('game-status paused');
   }
-  const rate = rateButton.value()
-  frameRate(rate)
-  rateButtonLabel.html(`frame rate: ${paused ? 0 : fr} fps`)
 
+  const rate = rateButton.value();
+  frameRate(rate);
+  rateButtonLabel.html(`速度: ${paused ? 0 : rate} 单位速度`);
 }
 
-const doLoop = () => {
+function init() {
+  for (let i = 0; i < 24; i++) {
+    for (let j = 0; j < 36; j++) {
+      // 随机1或者0
+      board[i][j] = 0;
+    }
+  }
+}
+
+function handleLoop() {
   if (paused) {
-    loop()
-    paused = false
+    loop();
+    paused = false;
   } else {
-    npLoop()
-    paused = true
+    noLoop();
+    paused = true;
   }
 }
 
-const mouseClicked = () => {
+function mouseClicked() {
   const i = floor(mouseY / 20);
   const j = floor(mouseX / 20);
   if (j >= 36 || i >= 24 || i < 0 || j < 0 || !paused) {
@@ -136,9 +131,14 @@ const mouseClicked = () => {
   redraw();
 }
 
-const keyPressed = () => {
+function keyPressed() {
   if (keyCode == 32) {
     handleLoop()
-    return false; // prevent default
+    return false;
   }
+}
+
+function startAndParseGame() {
+  handleLoop()
+  return false
 }
