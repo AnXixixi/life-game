@@ -5,7 +5,7 @@ const gameOfLife = (board) => {
   //遍历判断死活
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[0].length; j++) {
-      liveOrDie(board, i, j)
+      board = liveOrDie(board, i, j)
     }
   }
   //对新复活或者新死亡的细胞，恢复其 1/0 值
@@ -53,6 +53,7 @@ const liveOrDie = (board, cenX, cenY) => {
       board[cenX][cenY] = 2; // 2 新死亡的
     }
   }
+  return board
 }
 
 

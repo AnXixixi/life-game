@@ -5,6 +5,7 @@
         </div>
         <button @click="changeTheBoard()">Next</button>
         <button @click="startPlay()">Play</button>
+        <div>{{board}}</div>
     </div>
 </template>
 
@@ -15,10 +16,10 @@
     data() {
       return {
         board: [
-          [0, 0, 0],
           [0, 1, 0],
           [0, 0, 1],
-          [0, 1, 1]
+          [1, 1, 1],
+          [0, 0, 0]
         ]
       }
     },
@@ -26,8 +27,11 @@
       changeTheBoard() {
         console.log(this.board)
         let newBoard = gameOfLife(this.board)
-        this.$set(this.board, [], newBoard)
+        console.log(newBoard)
+        this.board = newBoard
         console.log(this.board)
+        // this.$set(this.board, [], newBoard)
+        // console.log(this.board)
       },
       startPlay() {
         setInterval(this.changeTheBoard, 1000)

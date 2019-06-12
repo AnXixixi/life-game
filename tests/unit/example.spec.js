@@ -1,4 +1,4 @@
-import {gameOfLife} from '../../src/luoji'
+import {gameOfLife} from '../../src/logic'
 
 
 // 1. 周围3个1，则1->1 0->1
