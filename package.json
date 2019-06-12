@@ -3,18 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "roll": "rollup -c rollup.config.js",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "start": "webpack"
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "css-loader": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "p5": "^0.8.0",
     "rollup": "^1.15.1",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^5.0.1",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "webpack": "^4.33.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
@@ -27,7 +34,8 @@
     "babel-jest": "^23.6.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "webpack-cli": "^3.3.4"
   },
   "eslintConfig": {
     "root": true,
