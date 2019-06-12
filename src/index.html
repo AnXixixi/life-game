@@ -10,6 +10,8 @@
 </head>
 <body>
     <header>
+        <button id="start">start</button>
+        <button id="stop">stop</button>
         <button id="next">next</button>
     </header>
     <div id="main">
@@ -26,6 +28,8 @@
         let canvas = document.getElementById('gamemain');
         let ctx = canvas.getContext('2d');
         let arr = init_first();//初始数组全为0
+        let play = null;//以后会变成一个定时器
+        let speed = 500;//演化速度默认500ms;
 
         canvas.width = CAVANS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
@@ -34,6 +38,8 @@
         canvas.addEventListener('click', clickDraw, false); //canvas鼠标点击事件
 
         document.getElementById("next").addEventListener('click',next);//点击next，绘制下一帧
+        document.getElementById("start").addEventListener('click',start);//点击start,自动演化
+        document.getElementById("stop").addEventListener('click',stop);//点击stop,停止自动演化
 
         //产生全为0的数组
         function init_first(){
@@ -54,7 +60,14 @@
             arr = gameOfLife(arr);
             draw(arr);
         }
-
+        function start(){
+            p = setInterval(next,speed);
+        }
+        function stop(){
+            if(p){
+               clearInterval(p); 
+            }
+        }
         function clickDraw(e) {
             const box = canvas.getBoundingClientRect();
             const mouseX = Math.floor((e.clientX - box.left) * CAVANS_WIDTH / box.width);
@@ -83,6 +96,7 @@
             //清除整个画布（重设高度）
             canvas.height = canvas.height;
             ctx.lineWidth = .1;
+            ctx.beginPath();
             // 第一步： 绘制横线
             for (var i = 0; i < canvas.width; i++) {
                 ctx.moveTo(RECTW * i, 0);
@@ -94,14 +108,18 @@
                 ctx.moveTo(0, RECTH * i);
                 ctx.lineTo(canvas.width, RECTH * i);
             }
+            ctx.closePath();
             ctx.stroke();
         }
         //填充样式
         function fill(x,y){
+            ctx.beginPath();
             ctx.fillStyle = "red";
-            ctx.fillRect(x*10,y*10,10,10);
+            // ctx.fillRect(x*10,y*10,10,10);
+            ctx.arc(x*10+RECTW/2 , y*10+RECTW/2 , RECTW/2, 0 , Math.PI*2 , true);
+            ctx.closePath();
+            ctx.fill();
         }
-
         draw(arr);
 </script>
 </html>
