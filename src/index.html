@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>LiveGame</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="data.js"></script>
+</head>
+
+<body>
+  <header>
+    <button id="next">start</button>
+  </header>
+  <div id="main">
+    <canvas id="gamemain"></canvas>
+  </div>
+  <footer></footer>
+</body>
+<script>
+  document
+    .getElementById('gamemain')
+    .addEventListener('click', updateHandler, false);
+  document.getElementById("next").addEventListener('click', next);
+
+  function next() {
+    //清空表格
+    console.log('next');
+    arr = gameOfLife(arr);
+    draw(arr);
+  }
+
+  function updateHandler(e) {
+
+    const box = canvas.getBoundingClientRect();
+    const mouseX = Math.floor((e.clientX - box.left) * canvas.width / box.width);
+    const mouseY = Math.floor((e.clientY - box.top) * canvas.height / box.height);
+
+    let x = Math.floor(mouseX / 10);
+    let y = Math.floor(mouseY / 10);
+    console.log([x, y]);
+    arr[x][y] = 1;
+    draw(arr);
+  }
+  let canvas = document.getElementById('gamemain');
+  let ctx = canvas.getContext('2d');
+  canvas.width = 600;
+  canvas.height = 600;
+  canvas.style.border = '1px solid black';
+  var rectH = 10;
+  var rectW = 10;
+  let arr = init_first();
+  let allZeroArr = init_first();
+
+  //绘制表格
+  function drawTable() {
+    //清除整个画布（重设高度）
+    canvas.height = canvas.height;
+    ctx.lineWidth = .1;
+    // 第一步： 绘制横线
+    for (var i = 0; i < canvas.width; i++) {
+      ctx.moveTo(rectW * i, 0);
+      //如果不设置moveTo，当前画笔没有位置
+      ctx.lineTo(rectW * i, canvas.height);
+    }
+    //第二步：绘制竖线：如果绘制的格子的宽高相等，可以将for循环放到一个里面；
+    for (var i = 0; i < canvas.height; i++) {
+      ctx.moveTo(0, rectH * i);
+      ctx.lineTo(canvas.width, rectH * i);
+    }
+    ctx.stroke();
+  }
+
+  function fill(x, y) {
+    ctx.fillRect(x * 10, y * 10, 10, 10);
+  }
+
+  function draw(arr) {
+    drawTable();
+    for (let i = 0; i < arr[0].length; i++) {
+      for (let j = 0; j < arr.length; j++) {
+        if (arr[i][j] == 1) {
+          fill(i, j);
+        }
+      }
+    }
+  }
+
+  function init_first() {
+    let first_arr = [];
+    for (let i = 0; i < 60; i++) {
+      first_arr[i] = [];
+      for (let j = 0; j < 60; j++) {
+        first_arr[i][j] = 0;
+      }
+    }
+    return first_arr;
+  }
+  draw(arr);
+</script>
+
+</html>
