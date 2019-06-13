@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+body{
+  
+}
 header{
 width: 85%;
 margin: 20px auto;
@@ -56,7 +59,7 @@ input[type=range]{
 margin-top: 18px;
 outline: none; 
 -webkit-appearance: none;/*清除系统默认样式*/  
-background: -webkit-linear-gradient(#61bd12, #61bd12) no-repeat, #ddd;  
+background: -webkit-linear-gradient(#3cefff, #3cefff) no-repeat, #ddd;  
 background-size: 50% 100%;/*设置左右宽度比例*/  
 height: 3px;/*横条的高度*/  
 } 

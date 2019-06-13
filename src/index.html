@@ -11,7 +11,7 @@
 <body>
     <header>
         <button id="start">start</button>
-        <button id="stop" style="display:none">stop</button>
+        <button id="stop" style="display:none;">stop</button>
         <button id="next">next</button>
         <input  id="range" type="range" min="100" max="1000" step="50" onchange="changeSpeed(this.value)">
         <select name="select" id="select" onchange="cellStyle(this.value)">
@@ -27,6 +27,7 @@
     <footer></footer>
 </body>
 <script>
+    
         const CAVANS_WIDTH = 600;//画布宽度
         const CANVAS_HEIGHT = 600;//画布高度
         const RECTW = 10 ; //每一小格的宽
@@ -63,7 +64,7 @@
         }
         function start(){
             document.getElementById('start').style="display:none";
-            document.getElementById('stop').style="display:block";
+            document.getElementById('stop').style="display:block;background-color:#ff9966";
             if(!play){
                 play = setInterval(next,speed);
             }
@@ -183,5 +184,6 @@
             }
         }
         draw(arr);
+    
 </script>
 </html>
