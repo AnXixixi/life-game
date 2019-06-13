@@ -33,11 +33,11 @@ const gameOfLife = gameBoard => {
 
   for (let i = 1; i <= gameBoardRows; i++) {
     for (let j = 1; j <= gamaBoardCols; j++) {
-      let theAliveNumbers = calAliveNum([i, j], extendedBoard)
+      let theAliveNumbers = calAliveCellNum([i, j], extendedBoard)
       if (extendedBoard[i][j] === 1) {
-        storeNewBoard[i - 1][j - 1] = aliveStatus(theAliveNumbers)
+        storeNewBoard[i - 1][j - 1] = aliveCellStatus(theAliveNumbers)
       } else {
-        storeNewBoard[i - 1][j - 1] = dieStatus(theAliveNumbers)
+        storeNewBoard[i - 1][j - 1] = dieCellStatus(theAliveNumbers)
       }
     }
   }
@@ -45,7 +45,7 @@ const gameOfLife = gameBoard => {
 }
 
 // 细胞死亡时的下一状态
-const dieStatus = aliveNumber => {
+const dieCellStatus = aliveNumber => {
   if (aliveNumber === 3) {
     return 1
   } else {
@@ -54,7 +54,7 @@ const dieStatus = aliveNumber => {
 }
 
 // 细胞存活时下一状态
-const aliveStatus = aliveNumber => {
+const aliveCellStatus = aliveNumber => {
   if (aliveNumber === 2 || aliveNumber === 3) {
     return 1
   } else {
@@ -63,7 +63,7 @@ const aliveStatus = aliveNumber => {
 }
 
 // 输入目标和整个矩阵，返回活着的细胞数量
-const calAliveNum = (currentCellCoordinate, gameBoard) => {
+const calAliveCellNum = (currentCellCoordinate, gameBoard) => {
   let cenX = currentCellCoordinate[0]
   let cenY = currentCellCoordinate[1]
   let aliveNumber = 0;
@@ -81,7 +81,7 @@ const calAliveNum = (currentCellCoordinate, gameBoard) => {
 export {
   gameOfLife,
   extendTheBoard,
-  dieStatus,
-  aliveStatus,
-  calAliveNum
+  dieCellStatus,
+  aliveCellStatus,
+  calAliveCellNum
 }
