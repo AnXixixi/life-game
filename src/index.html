@@ -11,7 +11,7 @@
 <body>
     <header>
         <button id="start">start</button>
-        <button id="stop">stop</button>
+        <button id="stop" style="display:none">stop</button>
         <button id="next">next</button>
         <input  id="range" type="range" min="100" max="1000" step="50" onchange="changeSpeed(this.value)">
         <select name="select" id="select" onchange="cleeStyle(this.value)">
@@ -69,12 +69,19 @@
             draw(arr);
         }
         function start(){
-            p = setInterval(next,speed);
+            document.getElementById('start').style="display:none";
+            document.getElementById('stop').style="display:block";
+            if(!play){
+                play = setInterval(next,speed);
+            }
         }
         function stop(){
-            if(p){
-               clearInterval(p); 
+            document.getElementById('start').style="display:block";
+            document.getElementById('stop').style="display:none";
+            if(play){
+               clearInterval(play); 
             }
+            play = null;
         }
         function clickDraw(e) {
             const box = canvas.getBoundingClientRect();
@@ -174,8 +181,10 @@
             draw(arr);
         }
         function changeSpeed(change_speed){
+            console.log(change_speed/1000);
+            document.getElementById('range').style.backgroundSize= `${change_speed/10}% 100%`;
             change_speed = Math.abs(1000-change_speed);
-            if(p){
+            if(play){
                 stop();
                 speed = change_speed;
                 start();
