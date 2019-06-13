@@ -1,185 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>LiveGame</title>
-  <link rel="stylesheet" href="index.css">
-  <script src="data.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LiveGame</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="data.js"></script>
 </head>
-
 <body>
-  <header>
-    <button id="start">start</button>
-    <button id="stop">stop</button>
-    <button id="next">next</button>
-    <input id="range" type="range" min="100" max="1000" step="50" onchange="changeSpeed(this.value)">
-    <select name="select" id="select" onchange="cleeStyle(this.value)">
-      <option value="diy">DIY</option>
-      <option value="Glider">Glider</option>
-      <option value="Small_Exploder">Small Exploder</option>
-      <option value="Exploder">Exploder</option>
-    </select>
-  </header>
-  <div id="main">
-    <canvas id="gamemain"></canvas>
-  </div>
-  <footer></footer>
+    <header>
+        <button id="start">start</button>
+        <button id="stop" style="display:none">stop</button>
+        <button id="next">next</button>
+        <input  id="range" type="range" min="100" max="1000" step="50" onchange="changeSpeed(this.value)">
+        <select name="select" id="select" onchange="cellStyle(this.value)">
+            <option value="diy">DIY</option>
+            <option value="Glider">Glider</option>
+            <option value="Small_Exploder">Small Exploder</option>
+            <option value="Exploder">Exploder</option>
+        </select>
+    </header>
+    <div id="main">
+        <canvas id="gamemain"></canvas>
+    </div>
+    <footer></footer>
 </body>
 <script>
-  const CAVANS_WIDTH = 600; //画布宽度
-  const CANVAS_HEIGHT = 600; //画布高度
-  const RECTW = 10; //每一小格的宽
-  const RECTH = 10; //每一小格的高
-  let canvas = document.getElementById('gamemain');
-  let ctx = canvas.getContext('2d');
-  let arr = init_first(); //初始数组全为0
-  let play = null; //以后会变成一个定时器
-  let speed = 300; //演化速度默认500ms;
-  canvas.width = CAVANS_WIDTH;
-  canvas.height = CANVAS_HEIGHT;
-  canvas.style.border = '1px solid black'; //画布边框样式
-  canvas.addEventListener('click', clickDraw, false); //canvas鼠标点击事件
-  document.getElementById("next").addEventListener('click', next); //点击next，绘制下一帧
-  document.getElementById("start").addEventListener('click', start); //点击start,自动演化
-  document.getElementById("stop").addEventListener('click', stop); //点击stop,停止自动演化
-  //产生全为0的数组
-  function init_first() {
-    let length_i = CANVAS_HEIGHT / RECTH; //每一行的格子数
-    let length_j = CAVANS_WIDTH / RECTW; //每一列的格子数
-    let first_arr = [];
-    for (let i = 0; i < length_i; i++) {
-      first_arr[i] = [];
-      for (let j = 0; j < length_j; j++) {
-        first_arr[i][j] = 0;
-      }
-    }
-    return first_arr;
-  }
-  //单次操作，改变数据，重新绘制
-  function next() {
-    arr = gameOfLife(arr);
-    draw(arr);
-  }
-
-  function start() {
-    p = setInterval(next, speed);
-  }
-
-  function stop() {
-    if (p) {
-      clearInterval(p);
-    }
-  }
-
-  function clickDraw(e) {
-    const box = canvas.getBoundingClientRect();
-    const mouseX = Math.floor((e.clientX - box.left) * CAVANS_WIDTH / box.width);
-    const mouseY = Math.floor((e.clientY - box.top) * CANVAS_HEIGHT / box.height);
-
-    //将点击的坐标转换成数组下标
-    let x = Math.floor(mouseX / 10);
-    let y = Math.floor(mouseY / 10);
-
-    arr[x][y] = arr[x][y] === 0 ? 1 : 0;
-    draw(arr);
-  }
-  //绘制整个画布
-  function draw(arr) {
-    drawTable();
-    for (let i = 0; i < arr[0].length; i++) {
-      for (let j = 0; j < arr.length; j++) {
-        if (arr[i][j] == 1) {
-          fill(i, j);
+        const CAVANS_WIDTH = 600;//画布宽度
+        const CANVAS_HEIGHT = 600;//画布高度
+        const RECTW = 10 ; //每一小格的宽
+        const RECTH = 10 ;//每一小格的高
+        let canvas = document.getElementById('gamemain');
+        let ctx = canvas.getContext('2d');
+        let arr = init_first();//初始数组全为0
+        let play = null;//以后会变成一个定时器
+        let speed = 300;//演化速度默认500ms;
+        canvas.width = CAVANS_WIDTH;
+        canvas.height = CANVAS_HEIGHT;
+        canvas.style.border = '1px solid black';//画布边框样式
+        canvas.addEventListener('click', clickDraw, false); //canvas鼠标点击事件
+        document.getElementById("next").addEventListener('click',next);//点击next，绘制下一帧
+        document.getElementById("start").addEventListener('click',start);//点击start,自动演化
+        document.getElementById("stop").addEventListener('click',stop);//点击stop,停止自动演化
+        //产生全为0的数组
+        function init_first(){
+            let length_i = CANVAS_HEIGHT / RECTH;//每一行的格子数
+            let length_j = CAVANS_WIDTH / RECTW; //每一列的格子数
+            let first_arr = [];
+            for(let i = 0;i < length_i; i++){
+                first_arr[i] = [];
+                for(let j = 0; j < length_j; j++){
+                first_arr[i][j] = 0;
+                }
+            }
+            return first_arr;
         }
-      }
-    }
-  }
-  //绘制表格
-  function drawTable() {
-    //清除整个画布（重设高度）
-    canvas.height = canvas.height;
-    ctx.lineWidth = .1;
-    ctx.beginPath();
-    // 第一步： 绘制横线
-    for (var i = 0; i < canvas.width; i++) {
-      ctx.moveTo(RECTW * i, 0);
-      //如果不设置moveTo，当前画笔没有位置
-      ctx.lineTo(RECTW * i, canvas.height);
-    }
-    //第二步：绘制竖线：如果绘制的格子的宽高相等，可以将for循环放到一个里面；
-    for (var i = 0; i < canvas.height; i++) {
-      ctx.moveTo(0, RECTH * i);
-      ctx.lineTo(canvas.width, RECTH * i);
-    }
-    ctx.closePath();
-    ctx.stroke();
-  }
-  //填充样式
-  function fill(x, y) {
-    ctx.beginPath();
-    ctx.fillStyle = "red";
-    // ctx.fillRect(x*10,y*10,10,10);
-    ctx.arc(x * 10 + RECTW / 2, y * 10 + RECTW / 2, RECTW / 2, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fill();
-  }
-  //获取默认样式
-  function cleeStyle(str) {
-    console.log(str);
-    let i = CANVAS_HEIGHT / (RECTH * 2);
-    let j = CAVANS_WIDTH / (RECTW * 2);
-    switch (str) {
-      case 'diy':
-        arr = init_first();
-        break;
-      case 'Glider':
-        arr = init_first();
-        arr[i][j] = 1;
-        arr[i + 1][j + 1] = 1;
-        arr[i + 1][j + 2] = 1;
-        arr[i][j + 2] = 1;
-        arr[i - 1][j + 2] = 1;
-        break;
-      case 'Small_Exploder':
-        arr = init_first();
-        arr[i][j] = 1;
-        arr[i - 1][j - 1] = 1;
-        arr[i][j - 1] = 1;
-        arr[i + 1][j - 1] = 1;
-        arr[i - 1][j - 2] = 1;
-        arr[i + 1][j - 2] = 1;
-        arr[i][j - 3] = 1;
-        break;
-      case 'Exploder':
-        arr = init_first();
-        arr[i][j] = 1;
-        arr[i - 2][j] = 1;
-        arr[i + 2][j] = 1;
-        arr[i - 2][j + 1] = 1;
-        arr[i - 2][j + 2] = 1;
-        arr[i - 2][j + 3] = 1;
-        arr[i - 2][j + 4] = 1;
-        arr[i + 2][j + 1] = 1;
-        arr[i + 2][j + 2] = 1;
-        arr[i + 2][j + 3] = 1;
-        arr[i + 2][j + 4] = 1;
-        arr[i][j + 4] = 1;
-    }
-    draw(arr);
-  }
-
-  function changeSpeed(change_speed) {
-    change_speed = Math.abs(1000 - change_speed);
-    if (p) {
-      stop();
-      speed = change_speed;
-      start();
-    }
-  }
-  draw(arr);
+        //单次操作，改变数据，重新绘制
+        function next(){
+            arr = gameOfLife(arr);
+            draw(arr);
+        }
+        function start(){
+            document.getElementById('start').style="display:none";
+            document.getElementById('stop').style="display:block";
+            if(!play){
+                play = setInterval(next,speed);
+            }
+        }
+        function stop(){
+            document.getElementById('start').style="display:block";
+            document.getElementById('stop').style="display:none";
+            if(play){
+               clearInterval(play); 
+            }
+            play = null;
+        }
+        function clickDraw(e) {
+            const box = canvas.getBoundingClientRect();
+            const mouseX = Math.floor((e.clientX - box.left) * CAVANS_WIDTH / box.width);
+            const mouseY = Math.floor((e.clientY - box.top) * CANVAS_HEIGHT / box.height);
+            
+            //将点击的坐标转换成数组下标
+            let x = Math.floor(mouseX/10);
+            let y = Math.floor(mouseY/10);
+            
+            arr[x][y] = arr[x][y] === 0 ? 1:0;
+            draw(arr);
+        }
+        //绘制整个画布
+        function draw(arr){
+            drawTable();
+            for(let i = 0;i < arr[0].length; i++){
+                for(let j = 0; j < arr.length; j++){
+                    if(arr[i][j] == 1){
+                        fill(i,j);
+                    }
+                }
+            }
+        }
+        //绘制表格
+        function drawTable() {
+            //清除整个画布（重设高度）
+            canvas.height = canvas.height;
+            ctx.lineWidth = .1;
+            ctx.beginPath();
+            // 第一步： 绘制横线
+            for (var i = 0; i < canvas.width; i++) {
+                ctx.moveTo(RECTW * i, 0);
+                //如果不设置moveTo，当前画笔没有位置
+                ctx.lineTo(RECTW * i, canvas.height);
+            }
+            //第二步：绘制竖线：如果绘制的格子的宽高相等，可以将for循环放到一个里面；
+            for (var i = 0; i < canvas.height; i++) {
+                ctx.moveTo(0, RECTH * i);
+                ctx.lineTo(canvas.width, RECTH * i);
+            }
+            ctx.closePath();
+            ctx.stroke();
+        }
+        //填充样式
+        function fill(x,y){
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+            // ctx.fillRect(x*10,y*10,10,10);
+            ctx.arc(x*10+RECTW/2 , y*10+RECTW/2 , RECTW/2, 0 , Math.PI*2 , true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        //获取默认样式
+        function cellStyle(str){
+            console.log(str);
+            let i = CANVAS_HEIGHT/(RECTH*2);
+            let j = CAVANS_WIDTH/(RECTW*2);
+            switch(str){
+                case 'diy':
+                    arr = init_first();
+                    break;
+                case 'Glider':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i+1][j+1] = 1;
+                    arr[i+1][j+2] = 1;
+                    arr[i][j+2] = 1;
+                    arr[i-1][j+2] = 1;
+                    break;
+                case 'Small_Exploder':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i-1][j-1] = 1;
+                    arr[i][j-1] = 1;
+                    arr[i+1][j-1] = 1;
+                    arr[i-1][j-2] = 1;
+                    arr[i+1][j-2] = 1;
+                    arr[i][j-3] = 1;
+                    break;
+                case 'Exploder':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i-2][j] = 1;
+                    arr[i+2][j] = 1;
+                    arr[i-2][j+1] = 1;
+                    arr[i-2][j+2] = 1;
+                    arr[i-2][j+3] = 1;
+                    arr[i-2][j+4] = 1;
+                    arr[i+2][j+1] = 1;
+                    arr[i+2][j+2] = 1;
+                    arr[i+2][j+3] = 1;
+                    arr[i+2][j+4] = 1;
+                    arr[i][j+4] = 1;
+            }
+            draw(arr);
+        }
+        function changeSpeed(change_speed){
+            console.log(change_speed/1000);
+            document.getElementById('range').style.backgroundSize= `${change_speed/10}% 100%`;
+            change_speed = Math.abs(1000-change_speed);
+            if(play){
+                stop();
+                speed = change_speed;
+                start();
+            }
+        }
+        draw(arr);
 </script>
-
 </html>
