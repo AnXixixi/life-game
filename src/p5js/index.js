@@ -46,7 +46,7 @@ function setup() {
   startButton.class('clear-btn');
   startButton.parent(divCell);
 
-  promBox = createP('生命细胞游戏：点击空格游戏开始');
+  promBox = createP('生命细胞游戏：设置细胞群，点击空格游戏开始');
   promBox.class('prom-box');
 
   statusBox = createP('暂停');
@@ -81,11 +81,11 @@ function randomCell() {
 }
 
 function draw() {
-  background(255);
+  background(225,255,255);
   for (let i = 0; i < 24; i++) {
     for (let j = 0; j < 36; j++) {
-      if ((board[i][j] == 1)) fill(0);
-      else fill(255);
+      if ((board[i][j] == 1)) fill(255,0,0);
+      else fill(225,255,255);
       stroke(0);
       rect(j * 20, i * 20, 20 - 1, 20 - 1);
     }

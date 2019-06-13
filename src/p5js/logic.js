@@ -73,3 +73,4 @@ const calAliveNum = (cur, board) => {
   aliveNumber -= board[cenX][cenY];
   return aliveNumber;
 }
+
