@@ -13,6 +13,13 @@
         <button id="start">start</button>
         <button id="stop">stop</button>
         <button id="next">next</button>
+        <input  id="range" type="range" min="100" max="1000" step="50">
+        <select name="select" id="select" onchange="cleeStyle(this.value)">
+            <option value="diy">DIY</option>
+            <option value="Glider">Glider</option>
+            <option value="Small_Exploder">Small Exploder</option>
+            <option value="Exploder">Exploder</option>
+        </select>
     </header>
     <div id="main">
         <canvas id="gamemain"></canvas>
@@ -29,7 +36,7 @@
         let ctx = canvas.getContext('2d');
         let arr = init_first();//初始数组全为0
         let play = null;//以后会变成一个定时器
-        let speed = 500;//演化速度默认500ms;
+        let speed = 300;//演化速度默认500ms;
 
         canvas.width = CAVANS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
@@ -40,6 +47,9 @@
         document.getElementById("next").addEventListener('click',next);//点击next，绘制下一帧
         document.getElementById("start").addEventListener('click',start);//点击start,自动演化
         document.getElementById("stop").addEventListener('click',stop);//点击stop,停止自动演化
+        // let select = document.getElementById('select');//获取默认样式
+        // select.addEventListener('change',cleeStyle(this.value));
+        // document.getElementById("range").addEventListener()
 
         //产生全为0的数组
         function init_first(){
@@ -119,6 +129,51 @@
             ctx.arc(x*10+RECTW/2 , y*10+RECTW/2 , RECTW/2, 0 , Math.PI*2 , true);
             ctx.closePath();
             ctx.fill();
+        }
+
+        //获取默认样式
+        function cleeStyle(str){
+            console.log(str);
+            let i = CANVAS_HEIGHT/(RECTH*2);
+            let j = CAVANS_WIDTH/(RECTW*2);
+            switch(str){
+                case 'diy':
+                    arr = init_first();
+                    break;
+                case 'Glider':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i+1][j+1] = 1;
+                    arr[i+1][j+2] = 1;
+                    arr[i][j+2] = 1;
+                    arr[i-1][j+2] = 1;
+                    break;
+                case 'Small_Exploder':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i-1][j-1] = 1;
+                    arr[i][j-1] = 1;
+                    arr[i+1][j-1] = 1;
+                    arr[i-1][j-2] = 1;
+                    arr[i+1][j-2] = 1;
+                    arr[i][j-3] = 1;
+                    break;
+                case 'Exploder':
+                    arr = init_first();
+                    arr[i][j] = 1;
+                    arr[i-2][j] = 1;
+                    arr[i+2][j] = 1;
+                    arr[i-2][j+1] = 1;
+                    arr[i-2][j+2] = 1;
+                    arr[i-2][j+3] = 1;
+                    arr[i-2][j+4] = 1;
+                    arr[i+2][j+1] = 1;
+                    arr[i+2][j+2] = 1;
+                    arr[i+2][j+3] = 1;
+                    arr[i+2][j+4] = 1;
+                    arr[i][j+4] = 1;
+            }
+            draw(arr);
         }
         draw(arr);
 </script>
