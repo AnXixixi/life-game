@@ -3,7 +3,7 @@
  */
 import {
   gameOfLife,
-  init,
+  extendTheBoard,
   dieStatus,
   aliveStatus,
   calAliveNum
@@ -38,7 +38,7 @@ describe('测试 gameOfLife 函数', () => {
 // 测试 初始化 函数
 describe('测试 init 函数', () => {
   it('2*2的矩阵在初始化后应该是4*4 周围都是0', () => {
-    expect(init([
+    expect(extendTheBoard([
       [1, 1],
       [1, 1]
     ])).toEqual([
