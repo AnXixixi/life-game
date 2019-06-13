@@ -1,7 +1,7 @@
 // 逻辑部分
 
 // 初始化矩阵
-const initializa = board => {
+const init = board => {
   if (board.length === 0) {
     return
   }
@@ -20,7 +20,7 @@ const initializa = board => {
 
 // 开始函数
 const gameOfLife = board => {
-  board = initializa(board)
+  board = init(board)
   // 开辟新数组保存状态 每次穿进去的是初始化后的棋盘，为了考虑边界
   let newBoard = new Array(board.length - 2);
   for (let i = 0, len = board.length - 2; i < len; i++) {
@@ -73,4 +73,3 @@ const calAliveNum = (cur, board) => {
   aliveNumber -= board[cenX][cenY];
   return aliveNumber;
 }
-

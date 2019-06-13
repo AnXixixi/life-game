@@ -1,17 +1,17 @@
 // 逻辑部分
 
 // 初始化矩阵
-const init = board => {
-  if (board.length === 0) {
+const init = extendBoard => {
+  if (extendBoard.length === 0) {
     return
   }
-  let newBoard = []
-  for (let i = 0, len = board.length; i < len; i++) {
-    newBoard[i] = [0, ...board[i], 0]
+  let extendedBoard = []
+  for (let i = 0, len = extendBoard.length; i < len; i++) {
+    extendedBoard[i] = [0, ...extendBoard[i], 0]
   }
-  let arr = new Array(board[0].length + 2).fill(0)
-  newBoard = [arr, ...newBoard, arr]
-  return newBoard
+  let arr = new Array(extendBoard[0].length + 2).fill(0)
+  extendedBoard = [arr, ...extendedBoard, arr]
+  return extendedBoard
 }
 
 // 1. 周围3个1，则1->1 0->1
