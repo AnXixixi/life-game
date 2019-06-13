@@ -13,7 +13,7 @@
         <button id="start">start</button>
         <button id="stop">stop</button>
         <button id="next">next</button>
-        <input  id="range" type="range" min="100" max="1000" step="50">
+        <input  id="range" type="range" min="100" max="1000" step="50" onchange="changeSpeed(this.value)">
         <select name="select" id="select" onchange="cleeStyle(this.value)">
             <option value="diy">DIY</option>
             <option value="Glider">Glider</option>
@@ -47,9 +47,7 @@
         document.getElementById("next").addEventListener('click',next);//点击next，绘制下一帧
         document.getElementById("start").addEventListener('click',start);//点击start,自动演化
         document.getElementById("stop").addEventListener('click',stop);//点击stop,停止自动演化
-        // let select = document.getElementById('select');//获取默认样式
-        // select.addEventListener('change',cleeStyle(this.value));
-        // document.getElementById("range").addEventListener()
+
 
         //产生全为0的数组
         function init_first(){
@@ -87,7 +85,7 @@
             let x = Math.floor(mouseX/10);
             let y = Math.floor(mouseY/10);
             
-            arr[x][y] = 1;
+            arr[x][y] = arr[x][y] === 0 ? 1:0;
             draw(arr);
         }
         //绘制整个画布
@@ -174,6 +172,14 @@
                     arr[i][j+4] = 1;
             }
             draw(arr);
+        }
+        function changeSpeed(change_speed){
+            change_speed = Math.abs(1000-change_speed);
+            if(p){
+                stop();
+                speed = change_speed;
+                start();
+            }
         }
         draw(arr);
 </script>
